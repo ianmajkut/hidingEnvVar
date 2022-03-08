@@ -1,0 +1,42 @@
+name: CI - App
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'app/**'
+
+jobs:
+  build:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Install Dependencies
+        run: npm ci
+        working-directory: ./app
+      - name: Build
+        run: npm run build
+        working-directory: ./app
+        env:
+          PRODUCTION: ${{secrets.PRODUCTION}}
+          FIRE_KEY: ${{ secrets.FIRE_KEY }}
+          APP_ID: ${{ secrets.FIREBASE_API_KEY }}
+          AUTH_DOMAIN: ${{ secrets.AUTH_DOMAIN }}  
+          MESSAGING_SENDER_ID: ${{ secrets.MESSAGING_SENDER_ID }}
+          PROJECT_ID: ${{ secrets.PROJECT_ID}}
+          STORAGE_BUCKET: ${{ secrets.STORAGE_BUCKET }}
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
+        env:
+          PRODUCTION: ${{secrets.PRODUCTION}}
+          FIRE_KEY: ${{ secrets.FIRE_KEY }}
+          APP_ID: ${{ secrets.FIREBASE_API_KEY }}
+          AUTH_DOMAIN: ${{ secrets.AUTH_DOMAIN }}  
+          MESSAGING_SENDER_ID: ${{ secrets.MESSAGING_SENDER_ID }}
+          PROJECT_ID: ${{ secrets.PROJECT_ID}}
+          STORAGE_BUCKET: ${{ secrets.STORAGE_BUCKET }}
