@@ -1,6 +1,6 @@
 import { writeFile } from 'fs';
 // Configure Angular environment.ts file path
-const targetPath = './src/environments/environment.ts';
+const targetPath = './src/environments/environment.prod.ts';
 // Load node modules
 const colors = require('colors');
 require('dotenv').config();
@@ -10,8 +10,7 @@ const envConfigFile = `export const environment = {
    apiurl: '${process.env['API_URL']}',
    appName: '${process.env['APP_NAME']}',
    awsPubKey: '${process.env['AWSKEY']}',
-   nodeEnv: '${process.env['NODE_ENV']}',
-   production: '${process.env['PRODUCTION']}'
+   nodeEnv: '${process.env['NODE_ENV']}'
 }
 `;
 console.log(
